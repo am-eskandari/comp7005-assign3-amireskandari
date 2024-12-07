@@ -165,7 +165,12 @@ cython_debug/
 
 # Peoject Dependant
 
+# venv for this project
 /myenv
+
+# Local Documents:
+/docs/local_copy
+
 
 # Port Scan Data:
 127.0.0.1:ftp_data
