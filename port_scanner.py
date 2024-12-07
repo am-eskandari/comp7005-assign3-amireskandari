@@ -57,6 +57,8 @@ class PortScanner:
             f"ℹ️ Starting scan on {self.target} from port {self.start_port} to {self.end_port}..."
         )
 
+        start_time = time.time()  # Record the start time
+
         with tqdm(
             total=total_ports, desc="Scanning Ports", unit="port"
         ) as progress_bar:
@@ -70,6 +72,15 @@ class PortScanner:
                     self.logger.error(f"Error scanning port {port}: {e}")
                 finally:
                     progress_bar.update(1)  # Update the progress bar
+
+        end_time = time.time()  # Record the end time
+        elapsed_time_ms = (
+            end_time - start_time
+        ) * 1000  # Calculate the elapsed time in milliseconds
+        display_info(
+            f"✅ Scan completed in {elapsed_time_ms:.2f} milliseconds."
+        )  # Display the time taken
+        self.logger.info(f"Scan completed in {elapsed_time_ms:.2f} milliseconds.")
 
     def output_results(self):
         """Display the scan results and log them."""
