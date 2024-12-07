@@ -4,7 +4,7 @@ import time
 from scapy.all import IP, TCP, sr1
 
 from utils.logger import setup_logger
-from utils.pretty_print import display_error, display_results
+from utils.pretty_print import display_error, display_results, display_info
 from utils.validation import validate_ip, validate_port_range, validate_delay
 
 
@@ -51,6 +51,9 @@ class PortScanner:
         self.logger.info(
             f"Starting scan on {self.target} from port {self.start_port} to {self.end_port}..."
         )
+        display_info(
+            f"ℹ️ Starting scan on {self.target} from port {self.start_port} to {self.end_port}..."
+        )
         for port in range(self.start_port, self.end_port + 1):
             try:
                 status = self.scan_port(port)
@@ -79,6 +82,7 @@ if __name__ == "__main__":
     try:
         scanner = PortScanner(args.target, args.start, args.end, args.delay)
         scanner.validate_inputs()
+        display_info("✅ Valid input detected. Starting scan...")  # New message here
         scanner.perform_scan()
         scanner.output_results()
     except ValueError as e:
