@@ -162,4 +162,10 @@ cython_debug/
 .idea/
 
 
+
+# Peoject Dependant
+
 /myenv
+
+# Port Scan Data:
+127.0.0.1:ftp_data
