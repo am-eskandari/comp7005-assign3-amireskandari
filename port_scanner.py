@@ -1,8 +1,10 @@
 import argparse
-import socket
 import time
 
 from scapy.all import IP, TCP, sr1
+
+from utils.pretty_print import display_info, display_error, display_results
+from utils.validation import validate_ip, validate_port_range, validate_delay
 
 
 class PortScanner:
@@ -14,16 +16,10 @@ class PortScanner:
         self.results = []
 
     def validate_inputs(self):
-        """Validate the target IP and port range."""
-        try:
-            socket.inet_aton(self.target)  # Check valid IP address
-        except socket.error:
-            raise ValueError("Invalid IP address.")
-
-        if not (1 <= self.start_port <= 65535 and 1 <= self.end_port <= 65535):
-            raise ValueError("Port range must be between 1 and 65535.")
-        if self.start_port > self.end_port:
-            raise ValueError("Start port cannot be greater than end port.")
+        """Delegate input validation to the validation module."""
+        validate_ip(self.target)
+        validate_port_range(self.start_port, self.end_port)
+        validate_delay(self.delay)
 
     def scan_port(self, port):
         """Send SYN packet to the target port and interpret the response."""
@@ -41,20 +37,21 @@ class PortScanner:
 
     def perform_scan(self):
         """Scan the range of ports and collect results."""
+        display_info(
+            f"Starting scan on {self.target} from port {self.start_port} to {self.end_port}..."
+        )
         for port in range(self.start_port, self.end_port + 1):
             try:
                 status = self.scan_port(port)
                 self.results.append((port, status))
-                print(f"Port {port}: {status}")
+                print(f"   Port {port}: {status}")
                 time.sleep(self.delay)  # Add delay between scans
             except Exception as e:
-                print(f"Error scanning port {port}: {e}")
+                display_error(f"Error scanning port {port}: {e}")
 
     def output_results(self):
-        """Print the scan results."""
-        print("\nScan Results:")
-        for port, status in self.results:
-            print(f"Port {port}: {status}")
+        """Delegate result display to pretty_print module."""
+        display_results(self.results)
 
 
 if __name__ == "__main__":
@@ -71,6 +68,6 @@ if __name__ == "__main__":
         scanner.perform_scan()
         scanner.output_results()
     except ValueError as e:
-        print(f"Input error: {e}")
+        display_error(e)
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        display_error(f"Unexpected error: {e}")
