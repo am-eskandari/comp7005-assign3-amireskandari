@@ -56,13 +56,13 @@ class PortScanner:
                 status = self.scan_port(port)
                 self.results.append((port, status))
                 self.logger.info(f"Port {port}: {status}")
-                time.sleep(self.delay)  # Add delay between scans
+                time.sleep(self.delay)
             except Exception as e:
                 self.logger.error(f"Error scanning port {port}: {e}")
 
     def output_results(self):
         """Display the scan results and log them."""
-        display_results(self.results)  # Pretty print to stdout
+        display_results(self.results)
         self.logger.info("Scan completed. Results:")
         for port, status in self.results:
             self.logger.info(f"Port {port}: {status}")
@@ -83,5 +83,7 @@ if __name__ == "__main__":
         scanner.output_results()
     except ValueError as e:
         display_error(e)
+    except KeyboardInterrupt:
+        display_error("❌ Scan interrupted by user. Ports scanned so far are logged.")
     except Exception as e:
         display_error(f"Unexpected error: {e}")

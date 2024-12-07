@@ -1,7 +1,10 @@
+import sys
+
+
 def display_error(message):
     """Display error messages in a pretty format."""
     print("\n❌ Error:")
-    print(f"   {message}\n")
+    print(f"   {message}\n", file=sys.stdout)
 
 
 def display_results(results):
