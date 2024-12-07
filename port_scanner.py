@@ -1,5 +1,6 @@
 import argparse
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from scapy.all import IP, TCP, sr1
 from tqdm import tqdm
@@ -17,6 +18,7 @@ class PortScanner:
         end_port=65535,
         delay=0,
         log_file="log_scan_results.log",
+        max_threads=10,
     ):
         self.target = target
         self.start_port = start_port
@@ -24,6 +26,7 @@ class PortScanner:
         self.delay = delay / 1000  # Convert milliseconds to seconds
         self.results = []
         self.logger = setup_logger(log_file)  # Initialize the logger
+        self.max_threads = max_threads  # Maximum number of threads
 
     def validate_inputs(self):
         """Validate the target IP and port range."""
@@ -39,16 +42,16 @@ class PortScanner:
         response = sr1(packet, timeout=1, verbose=0)
 
         if response is None:
-            return "Filtered"
+            return port, "Filtered"
         elif response.haslayer(TCP):
             if response[TCP].flags == "SA":  # SYN-ACK
-                return "Open"
+                return port, "Open"
             elif response[TCP].flags == "RA":  # RST-ACK
-                return "Closed"
-        return "Unknown"
+                return port, "Closed"
+        return port, "Unknown"
 
     def perform_scan(self):
-        """Scan the range of ports and collect results."""
+        """Scan the range of ports concurrently and collect results."""
         total_ports = self.end_port - self.start_port + 1
         self.logger.info(
             f"Starting scan on {self.target} from port {self.start_port} to {self.end_port}..."
@@ -59,19 +62,25 @@ class PortScanner:
 
         start_time = time.time()  # Record the start time
 
+        # Create a progress bar
         with tqdm(
             total=total_ports, desc="Scanning Ports", unit="port"
         ) as progress_bar:
-            for port in range(self.start_port, self.end_port + 1):
-                try:
-                    status = self.scan_port(port)
-                    self.results.append((port, status))
-                    self.logger.info(f"Port {port}: {status}")
-                    time.sleep(self.delay)  # Add delay between scans
-                except Exception as e:
-                    self.logger.error(f"Error scanning port {port}: {e}")
-                finally:
-                    progress_bar.update(1)  # Update the progress bar
+            with ThreadPoolExecutor(max_workers=self.max_threads) as executor:
+                futures = {
+                    executor.submit(self.scan_port, port): port
+                    for port in range(self.start_port, self.end_port + 1)
+                }
+
+                for future in as_completed(futures):
+                    try:
+                        port, status = future.result()
+                        self.results.append((port, status))
+                        self.logger.info(f"Port {port}: {status}")
+                    except Exception as e:
+                        self.logger.error(f"Error scanning port: {e}")
+                    finally:
+                        progress_bar.update(1)  # Update the progress bar
 
         end_time = time.time()  # Record the end time
         elapsed_time_ms = (
@@ -84,9 +93,9 @@ class PortScanner:
 
     def output_results(self):
         """Display the scan results and log them."""
-        display_results(self.results)
+        display_results(sorted(self.results))  # Sort results by port for readability
         self.logger.info("Scan completed. Results:")
-        for port, status in self.results:
+        for port, status in sorted(self.results):
             self.logger.info(f"Port {port}: {status}")
 
 
@@ -101,7 +110,7 @@ if __name__ == "__main__":
     try:
         scanner = PortScanner(args.target, args.start, args.end, args.delay)
         scanner.validate_inputs()
-        display_info("✅ Valid input detected. Starting scan...")  # New message here
+        display_info("✅ Valid input detected. Starting scan...")
         scanner.perform_scan()
         scanner.output_results()
     except ValueError as e:
