@@ -2,6 +2,7 @@ import argparse
 import time
 
 from scapy.all import IP, TCP, sr1
+from tqdm import tqdm
 
 from utils.logger import setup_logger
 from utils.pretty_print import display_error, display_results, display_info
@@ -48,20 +49,27 @@ class PortScanner:
 
     def perform_scan(self):
         """Scan the range of ports and collect results."""
+        total_ports = self.end_port - self.start_port + 1
         self.logger.info(
             f"Starting scan on {self.target} from port {self.start_port} to {self.end_port}..."
         )
         display_info(
             f"ℹ️ Starting scan on {self.target} from port {self.start_port} to {self.end_port}..."
         )
-        for port in range(self.start_port, self.end_port + 1):
-            try:
-                status = self.scan_port(port)
-                self.results.append((port, status))
-                self.logger.info(f"Port {port}: {status}")
-                time.sleep(self.delay)
-            except Exception as e:
-                self.logger.error(f"Error scanning port {port}: {e}")
+
+        with tqdm(
+            total=total_ports, desc="Scanning Ports", unit="port"
+        ) as progress_bar:
+            for port in range(self.start_port, self.end_port + 1):
+                try:
+                    status = self.scan_port(port)
+                    self.results.append((port, status))
+                    self.logger.info(f"Port {port}: {status}")
+                    time.sleep(self.delay)  # Add delay between scans
+                except Exception as e:
+                    self.logger.error(f"Error scanning port {port}: {e}")
+                finally:
+                    progress_bar.update(1)  # Update the progress bar
 
     def output_results(self):
         """Display the scan results and log them."""
