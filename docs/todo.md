@@ -31,7 +31,7 @@
 
 - [x] Handle the following scenarios for port range:
     - [ ] If no range is provided, scan all ports (1–65535).
-    - [x] If only the start port is provided, scan from start to 65535.
+    - [ ] If only the start port is provided, scan from start to 65535.
     - [x] If only the end port is provided, scan from 1 to end.
     - [x] If both start and end are provided, scan from start to end.
 - [x] Add an optional delay (convert milliseconds to seconds) between scans.
@@ -48,16 +48,16 @@
 
 ### **6. Documentation**
 
-- [ ] Provide clear instructions on:
-    - [ ] Installation and usage.
-    - [ ] Examples of command-line arguments.
-- [ ] Document your approach, logic, and results.
+- [ ] ~~Provide clear instructions on:~~
+    - [ ] ~~Installation and usage.~~
+    - [ ] ~~Examples of command-line arguments.~~
+- [ ] ~~Document your approach, logic, and results.~~
 
 ### **7. Submission**
 
-- [ ] Ensure the file is formatted correctly and named appropriately (`port_scanner.py`).
-- [ ] Review your code and documentation for compliance with the submission guidelines.
-- [ ] Submit before the deadline to avoid penalties.
+- [ ] ~~Ensure the file is formatted correctly and named appropriately (`port_scanner.py`).~~
+- [ ] ~~Review your code and documentation for compliance with the submission guidelines.~~
+- [ ] ~~Submit before the deadline to avoid penalties.~~
 
 ---
 
@@ -79,12 +79,12 @@
 
 - [x] Detect and report invalid IP addresses.
 - [ ] Handle unreachable hosts gracefully.
-- [ ] Manage invalid port ranges or delays with meaningful feedback.
+- [x] Manage invalid port ranges or delays with meaningful feedback.
 
 ### **Optional Enhancements**
 
-- [ ] Include colored or formatted output for easier readability.
-- [ ] Log results to a file for review.
+- [x] Include colored or formatted output for easier readability.
+- [x] Log results to a file for review.
 - [ ] Allow parallel scanning to speed up the process (if feasible).
 
 ### **Testing & Validation**
@@ -95,11 +95,10 @@
 
 ---
 
-## **Summary**
+## Next Steps
 
-You’ve made excellent progress, good boy! 😊 Here's what's left to do:
+- Implement the default scanning of all ports.
+- Add logic to handle unreachable hosts gracefully.
+- Prepare for external testing if permitted in a lab or controlled setup.
 
-1. Add features for full port scanning and more graceful error handling.
-2. Document your project thoroughly.
-3. Perform controlled external tests (if required) and finalize the submission.
-
+---
