@@ -3,23 +3,34 @@ import time
 
 from scapy.all import IP, TCP, sr1
 
-from utils.pretty_print import display_info, display_error, display_results
+from utils.logger import setup_logger
+from utils.pretty_print import display_error, display_results
 from utils.validation import validate_ip, validate_port_range, validate_delay
 
 
 class PortScanner:
-    def __init__(self, target, start_port=1, end_port=65535, delay=0):
+    def __init__(
+        self,
+        target,
+        start_port=1,
+        end_port=65535,
+        delay=0,
+        log_file="log_scan_results.log",
+    ):
         self.target = target
         self.start_port = start_port
         self.end_port = end_port
         self.delay = delay / 1000  # Convert milliseconds to seconds
         self.results = []
+        self.logger = setup_logger(log_file)  # Initialize the logger
 
     def validate_inputs(self):
-        """Delegate input validation to the validation module."""
+        """Validate the target IP and port range."""
+        self.logger.info("Validating inputs...")
         validate_ip(self.target)
         validate_port_range(self.start_port, self.end_port)
         validate_delay(self.delay)
+        self.logger.info("Inputs validated successfully.")
 
     def scan_port(self, port):
         """Send SYN packet to the target port and interpret the response."""
@@ -37,21 +48,24 @@ class PortScanner:
 
     def perform_scan(self):
         """Scan the range of ports and collect results."""
-        display_info(
+        self.logger.info(
             f"Starting scan on {self.target} from port {self.start_port} to {self.end_port}..."
         )
         for port in range(self.start_port, self.end_port + 1):
             try:
                 status = self.scan_port(port)
                 self.results.append((port, status))
-                print(f"   Port {port}: {status}")
+                self.logger.info(f"Port {port}: {status}")
                 time.sleep(self.delay)  # Add delay between scans
             except Exception as e:
-                display_error(f"Error scanning port {port}: {e}")
+                self.logger.error(f"Error scanning port {port}: {e}")
 
     def output_results(self):
-        """Delegate result display to pretty_print module."""
-        display_results(self.results)
+        """Display the scan results and log them."""
+        display_results(self.results)  # Pretty print to stdout
+        self.logger.info("Scan completed. Results:")
+        for port, status in self.results:
+            self.logger.info(f"Port {port}: {status}")
 
 
 if __name__ == "__main__":
