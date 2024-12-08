@@ -6,7 +6,7 @@ to test the program’s functionality and ensure it works logically.
 I'm running these demos on:
 
 ```
-192.168.10
+192.168.0.10
 ```
 
 ---
@@ -19,7 +19,7 @@ I'm running these demos on:
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10
+sudo python3 port_scanner.py 192.168.0.10
 ```
 
 ### **Single Port Scan**
@@ -28,7 +28,7 @@ sudo python3 port_scanner.py 192.168.10
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --start 22 --end 22
+sudo python3 port_scanner.py 192.168.0.10 --start 22 --end 22
 ```
 
 ### **Range of Ports Scan**
@@ -37,7 +37,7 @@ sudo python3 port_scanner.py 192.168.10 --start 22 --end 22
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --start 20 --end 80
+sudo python3 port_scanner.py 192.168.0.10 --start 20 --end 80
 ```
 
 ### **Delay Between Scans**
@@ -46,7 +46,7 @@ sudo python3 port_scanner.py 192.168.10 --start 20 --end 80
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --start 20 --end 80 --delay 100
+sudo python3 port_scanner.py 192.168.0.10 --start 20 --end 80 --delay 100
 ```
 
 ### **Start Port Only**
@@ -55,7 +55,7 @@ sudo python3 port_scanner.py 192.168.10 --start 20 --end 80 --delay 100
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --start 22
+sudo python3 port_scanner.py 192.168.0.10 --start 22
 ```
 
 ### **End Port Only**
@@ -64,7 +64,7 @@ sudo python3 port_scanner.py 192.168.10 --start 22
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --end 80
+sudo python3 port_scanner.py 192.168.0.10 --end 80
 ```
 
 ---
@@ -77,7 +77,7 @@ sudo python3 port_scanner.py 192.168.10 --end 80
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.100.254
+sudo python3 port_scanner.py 192.168.0.100.254
 ```
 
 ### **Testing Denied Ports**
@@ -87,7 +87,7 @@ states.
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --start 1 --end 25
+sudo python3 port_scanner.py 192.168.0.10 --start 1 --end 25
 ```
 
 ### **Localhost Open Port**
@@ -96,7 +96,7 @@ sudo python3 port_scanner.py 192.168.10 --start 1 --end 25
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --start 22 --end 22
+sudo python3 port_scanner.py 192.168.0.10 --start 22 --end 22
 ```
 
 ---
@@ -119,7 +119,7 @@ than the end port.
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --start 100 --end 50
+sudo python3 port_scanner.py 192.168.0.10 --start 100 --end 50
 ```
 
 ### **Negative Port Range**
@@ -128,7 +128,7 @@ sudo python3 port_scanner.py 192.168.10 --start 100 --end 50
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --start -10 --end 50
+sudo python3 port_scanner.py 192.168.0.10 --start -10 --end 50
 ```
 
 ### **Exceeding Maximum Port Range**
@@ -137,7 +137,7 @@ sudo python3 port_scanner.py 192.168.10 --start -10 --end 50
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --start 1 --end 70000
+sudo python3 port_scanner.py 192.168.0.10 --start 1 --end 70000
 ```
 
 ### **Non-Integer Port Values**
@@ -146,7 +146,7 @@ sudo python3 port_scanner.py 192.168.10 --start 1 --end 70000
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --start abc --end 80
+sudo python3 port_scanner.py 192.168.0.10 --start abc --end 80
 ```
 
 ### **Invalid Delay**
@@ -155,7 +155,7 @@ sudo python3 port_scanner.py 192.168.10 --start abc --end 80
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.10 --start 22 --end 22 --delay xyz
+sudo python3 port_scanner.py 192.168.0.10 --start 22 --end 22 --delay xyz
 ```
 
 ---
