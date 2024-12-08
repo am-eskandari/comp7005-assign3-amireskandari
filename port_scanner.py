@@ -18,7 +18,7 @@ class PortScanner:
         end_port=65535,
         delay=0,
         log_file="log_scan_results.log",
-        max_threads=50,
+        max_threads=48,
     ):
         self.target = target
         self.start_port = start_port
