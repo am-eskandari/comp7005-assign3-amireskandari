@@ -9,6 +9,12 @@ I'm running these demos on:
 192.168.0.10
 ```
 
+Double Check the open and closed port on:
+
+```bash
+sudo nmap -p 1-1000 192.168.0.10
+```
+
 ---
 
 ## **1. Basic Functionality**
