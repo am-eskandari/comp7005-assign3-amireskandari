@@ -92,8 +92,24 @@ class PortScanner:
         self.logger.info(f"Scan completed in {elapsed_time_ms:.2f} milliseconds.")
 
     def output_results(self):
-        """Display the scan results and log them."""
+        """Display the scan results, log them, and show totals."""
+        # Count the status of ports
+        total_open = sum(1 for _, status in self.results if status == "Open")
+        total_closed = sum(1 for _, status in self.results if status == "Closed")
+        total_filtered = sum(1 for _, status in self.results if status == "Filtered")
+
+        # Pretty print results
         display_results(sorted(self.results))  # Sort results by port for readability
+
+        # Display totals
+        display_info(
+            f"🔢 Totals: Open: {total_open}, Closed: {total_closed}, Filtered: {total_filtered}"
+        )
+        self.logger.info(
+            f"Totals: Open: {total_open}, Closed: {total_closed}, Filtered: {total_filtered}"
+        )
+
+        # Log results
         self.logger.info("Scan completed. Results:")
         for port, status in sorted(self.results):
             self.logger.info(f"Port {port}: {status}")
