@@ -18,7 +18,7 @@ class PortScanner:
         end_port=65535,
         delay=0,
         log_file="log_scan_results.log",
-        max_threads=10,
+        max_threads=50,
     ):
         self.target = target
         self.start_port = start_port
@@ -54,10 +54,10 @@ class PortScanner:
         """Scan the range of ports concurrently and collect results."""
         total_ports = self.end_port - self.start_port + 1
         self.logger.info(
-            f"Starting scan on {self.target} from port {self.start_port} to {self.end_port}..."
+            f"Starting scan on {self.target} from port {self.start_port} to {self.end_port} with {self.max_threads} threads..."
         )
         display_info(
-            f"ℹ️ Starting scan on {self.target} from port {self.start_port} to {self.end_port}..."
+            f"ℹ️ Starting scan on {self.target} from port {self.start_port} to {self.end_port} with {self.max_threads} threads..."
         )
 
         start_time = time.time()  # Record the start time
