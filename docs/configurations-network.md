@@ -5,11 +5,11 @@ to test the program’s functionality and ensure it works logically.
 
 I'm running these demos on:
 
-```
+```bash
 192.168.0.10
 ```
 
-Double Check the open and closed port on:
+Double Check the open and closed ports with `nmap`:
 
 ```bash
 sudo nmap -p 1-1000 192.168.0.10
@@ -28,6 +28,14 @@ sudo nmap -p 1-1000 192.168.0.10
 sudo python3 port_scanner.py 192.168.0.10
 ```
 
+**Cross-reference**:
+
+```bash
+sudo nmap -p 1-65535 192.168.0.10
+```
+
+---
+
 ### **Single Port Scan**
 
 **Description**: Scans a specific port using the `--start` and `--end` arguments with the same value.  
@@ -37,14 +45,47 @@ sudo python3 port_scanner.py 192.168.0.10
 sudo python3 port_scanner.py 192.168.0.10 --start 22 --end 22
 ```
 
+**Cross-reference**:
+
+```bash
+sudo nmap -p 22 192.168.0.10
+```
+
+---
+
 ### **Range of Ports Scan**
 
-**Description**: Scans a specified range of ports using the `--start` and `--end` arguments.  
+#### **1. Small Range**
+
+**Description**: Scans a small range of ports using the `--start` and `--end` arguments.  
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.0.10 --start 20 --end 80
+sudo python3 port_scanner.py 192.168.0.10 --start 20 --end 30
 ```
+
+**Cross-reference**:
+
+```bash
+sudo nmap -p 20-30 192.168.0.10
+```
+
+#### **2. Medium Range**
+
+**Description**: Scans a medium range of ports (e.g., ports 50–200).  
+**Command**:
+
+```bash
+sudo python3 port_scanner.py 192.168.0.10 --start 50 --end 200
+```
+
+**Cross-reference**:
+
+```bash
+sudo nmap -p 50-200 192.168.0.10
+```
+
+---
 
 ### **Delay Between Scans**
 
@@ -52,8 +93,16 @@ sudo python3 port_scanner.py 192.168.0.10 --start 20 --end 80
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.0.10 --start 20 --end 80 --delay 100
+sudo python3 port_scanner.py 192.168.0.10 --start 20 --end 80 --delay 50
 ```
+
+**Cross-reference**:
+
+```bash
+sudo nmap -p 20-80 192.168.0.10
+```
+
+---
 
 ### **Start Port Only**
 
@@ -61,8 +110,16 @@ sudo python3 port_scanner.py 192.168.0.10 --start 20 --end 80 --delay 100
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.0.10 --start 22
+sudo python3 port_scanner.py 192.168.0.10 --start 55000
 ```
+
+**Cross-reference**:
+
+```bash
+sudo nmap -p 55000-65535 192.168.0.10
+```
+
+---
 
 ### **End Port Only**
 
@@ -70,21 +127,18 @@ sudo python3 port_scanner.py 192.168.0.10 --start 22
 **Command**:
 
 ```bash
-sudo python3 port_scanner.py 192.168.0.10 --end 80
+sudo python3 port_scanner.py 192.168.0.10 --end 1500
+```
+
+**Cross-reference**:
+
+```bash
+sudo nmap -p 1-1500 192.168.0.10
 ```
 
 ---
 
 ## **2. Real-World Scenarios**
-
-### **Unreachable Host**
-
-**Description**: Tests the program’s behavior when the target IP is unreachable.  
-**Command**:
-
-```bash
-sudo python3 port_scanner.py 192.168.0.100.254
-```
 
 ### **Testing Denied Ports**
 
@@ -96,6 +150,14 @@ states.
 sudo python3 port_scanner.py 192.168.0.10 --start 1 --end 25
 ```
 
+**Cross-reference**:
+
+```bash
+sudo nmap -p 1-25 192.168.0.10
+```
+
+---
+
 ### **Localhost Open Port**
 
 **Description**: Confirms detection of an open port on the localhost (e.g., SSH on port 22).  
@@ -103,6 +165,12 @@ sudo python3 port_scanner.py 192.168.0.10 --start 1 --end 25
 
 ```bash
 sudo python3 port_scanner.py 192.168.0.10 --start 22 --end 22
+```
+
+**Cross-reference**:
+
+```bash
+sudo nmap -p 22 192.168.0.10
 ```
 
 ---
@@ -118,6 +186,8 @@ sudo python3 port_scanner.py 192.168.0.10 --start 22 --end 22
 sudo python3 port_scanner.py 999.999.999.999
 ```
 
+---
+
 ### **Reversed Port Range**
 
 **Description**: Validates that the program detects and reports an invalid port range where the start port is greater
@@ -128,6 +198,8 @@ than the end port.
 sudo python3 port_scanner.py 192.168.0.10 --start 100 --end 50
 ```
 
+---
+
 ### **Negative Port Range**
 
 **Description**: Verifies that negative port values are rejected.  
@@ -136,6 +208,8 @@ sudo python3 port_scanner.py 192.168.0.10 --start 100 --end 50
 ```bash
 sudo python3 port_scanner.py 192.168.0.10 --start -10 --end 50
 ```
+
+---
 
 ### **Exceeding Maximum Port Range**
 
@@ -146,6 +220,8 @@ sudo python3 port_scanner.py 192.168.0.10 --start -10 --end 50
 sudo python3 port_scanner.py 192.168.0.10 --start 1 --end 70000
 ```
 
+---
+
 ### **Non-Integer Port Values**
 
 **Description**: Validates handling of non-integer values for ports.  
@@ -155,6 +231,8 @@ sudo python3 port_scanner.py 192.168.0.10 --start 1 --end 70000
 sudo python3 port_scanner.py 192.168.0.10 --start abc --end 80
 ```
 
+---
+
 ### **Invalid Delay**
 
 **Description**: Tests the handling of non-integer or negative values for the delay.  
@@ -163,5 +241,3 @@ sudo python3 port_scanner.py 192.168.0.10 --start abc --end 80
 ```bash
 sudo python3 port_scanner.py 192.168.0.10 --start 22 --end 22 --delay xyz
 ```
-
----
