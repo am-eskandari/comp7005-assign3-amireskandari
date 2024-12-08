@@ -21,7 +21,7 @@ states = [
         "State": "LOG_RESULT",
         "Description": "Logs the result and prepares for the next port.",
     },
-    {"State": "TERMINATE", "Description": "Completes the scan and exits."},
+    {"State": "TERMINATE", "Description": "Completes the scan and exits gracefully."},
 ]
 
 # Define transitions based on the scanner code
@@ -48,6 +48,12 @@ transitions = [
         "To State": "TERMINATE",
         "Function": "all_ports_scanned",
     },
+    {"From State": "START", "To State": "TERMINATE", "Function": "invalid_input"},
+    {
+        "From State": "WAIT_RESPONSE",
+        "To State": "TERMINATE",
+        "Function": "handle_interrupt",
+    },
 ]
 
 
@@ -58,7 +64,7 @@ def generate_fsm_diagram(output_file="fsm_diagram"):
     output_file_with_timestamp = f"{output_file}_{timestamp}"
 
     fsm = Digraph("FSM", format="png")
-    fsm.attr(rankdir="TB", size="10,10", dpi="1200")  # Adjust size and resolution
+    fsm.attr(rankdir="TB", size="10,15", dpi="1200")  # Adjust size and resolution
 
     # Add states with color coding
     for state in states:
